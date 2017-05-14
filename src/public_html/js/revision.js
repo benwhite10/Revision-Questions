@@ -1,6 +1,8 @@
-function generateReport() {
+function generateReport(ids) {
+	var ids = JSON.stringify(ids);
 	var infoArray = {
-		type: "DOWNLOAD"
+		type: "DOWNLOAD",
+		ids: ids
 	};
 	$.ajax({
 		type: "POST",
@@ -17,13 +19,14 @@ function generateReport() {
 }
 
 function downloadSuccess(json) {
-	console.log("Success");
 	if (json["success"]) {
 		var link = document.createElement("a");
-		link.setAttribute("href", json["url"]);
+		link.setAttribute("href", json["response"]["url"]);
 		link.setAttribute("download", "Maths Revision.pdf");
 		document.body.appendChild(link);
 		link.click();
-		console.log(json["url"]);
+		console.log(json["response"]["url"]);
+	} else {
+		console.log(json);
 	}
 }
