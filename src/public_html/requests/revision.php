@@ -36,14 +36,18 @@ function download_worksheet($ids) {
 	$text = "\\documentclass{Class_Files/Welly_Workbook} \\printdiagramstrue \\begin{document} \\nextprobset{Revision Questions} \\begin{questions}";
 	foreach ($questions as $question) {
 		$qtext = $question["Question"];
+		$text .= "\Question $qtext ";
+	}
+	$text .= "\\end{questions} \\nextprobset{Solutions} \\begin{questions}";
+	foreach ($questions as $question) {
 		$stext = $question["Solution"];
-		$text .= "\Question $qtext \solns{" . $stext . "}";
+		$text .= "\Question $stext ";
 	}
 	$text .= "\\end{questions} \\end{document}";
 
 	file_put_contents("test_latex.tex", $text);
 	//exec('sudo mkdir output');
-	exec('pdflatex test_latex.tex');
+	exec('pdflatex -interaction=batchmode test_latex.tex');
 	//$dir = 'Temp';
 	//$files = array_diff(scandir($dir), array('.','..')); 
 	//foreach ($files as $file) { 
@@ -56,7 +60,7 @@ function download_worksheet($ids) {
 	unlink("test_latex.aux");
 	unlink("test_latex.sta");
 
-	$response = array("url" => "requests/test_latex.pdf");
+	$response = array("url" => "requests/test_latex.pdf", "text" => $text);
 	succeed_request($response);
 }
 
