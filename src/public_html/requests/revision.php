@@ -26,7 +26,7 @@ function download_worksheet() {
 		echo json_encode($response);
 		exit();
 	}
-
+	
 	$text = "\\documentclass{Class_Files/Welly_Workbook} \\printdiagramstrue \\begin{document} \\nextprobset{Revision Questions} \\begin{questions}";
 	foreach ($questions as $question) {
 		$qtext = $question["Question"];
@@ -36,18 +36,23 @@ function download_worksheet() {
 	$text .= "\\end{questions} \\end{document}";
 
 	file_put_contents("test_latex.tex", $text);
-	exec('pdflatex -aux-directory="Temp/" -output-directory="output/" test_latex.tex');
-	$dir = 'Temp';
-	$files = array_diff(scandir($dir), array('.','..')); 
-	foreach ($files as $file) { 
-		(is_dir("$dir/$file")) ? delTree("$dir/$file") : unlink("$dir/$file"); 
-	} 
-	rmdir($dir); 
+	//exec('sudo mkdir output');
+	exec('pdflatex test_latex.tex');
+	//$dir = 'Temp';
+	//$files = array_diff(scandir($dir), array('.','..')); 
+	//foreach ($files as $file) { 
+		//(is_dir("$dir/$file")) ? delTree("$dir/$file") : unlink("$dir/$file"); 
+	//} 
+	//rmdir($dir); 
 	unlink("test_latex.tex");
+	unlink("test_latex.out");
+	unlink("test_latex.log");
+	unlink("test_latex.aux");
+	unlink("test_latex.sta");
 
 	$response = array(
 		"success" => TRUE,
-		"url" => "requests/output/test_latex.pdf");
+		"url" => "requests/test_latex.pdf");
 	echo json_encode($response);
 	exit();
 }
