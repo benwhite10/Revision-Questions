@@ -1,5 +1,165 @@
+body {
+	margin: 0;
+	background: #000;
+}
+
+#main {
+	width: 100%;
+	max-width: 1000px;
+	margin: 0 auto;
+}
+
 #maths_title {
-	text-align: center
+	text-align: center;
+	color: #f7d117;
+}
+
+#maths_title > h1 {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 40px; 
+	font-weight: bold;
+}
+
+#year_groups {
+	height: 100px;
+}
+
+.year_groups_col {
+	display: inline-block;
+	width: 50%;
+	margin: 0;
+	float: left;
+	height: 70px;
+}
+
+.year_group_label {
+	margin: 0;
+	width: 100%;
+	height: 35px;
+	color: #f49712;
+}
+
+.year_group_label > h3 {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 25px; 
+	line-height: 35px;
+	font-weight: bold;
+	padding: 0;
+	margin: 0;
+	text-align: center;
+}
+
+.year_group_select {
+	margin: 0;
+	width: 100%;
+	height: 40px;
+}
+
+#year_group_select{
+	width: 100%;
+	height: 25px;
+	margin: 5px 0;
+	padding: 0;
+}
+
+#generate_button {
+	width: 80%;
+	height: 65px;
+	background: #a6d6c9;
+	color: #000;
+	display: inline-block;
+	float: right;
+	cursor: pointer;
+}
+
+#generate_button:hover {
+	background: #d8f2eb;
+}	
+
+#generate_button > h3 {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 30px; 
+	line-height: 65px;
+	font-weight: bold;
+	text-align: center;
+	padding: 0;
+	margin: 0;
+}
+
+.topic_row {
+	width: 100%;
+	height: 50px;
+	margin: 5px 0;
+	border-bottom: #FFF 1px solid;
+}
+
+.topic_row_title {
+	display: inline-block;
+	float: left;
+	width: 64%;
+	height: 50px;
+	margin: 0;
+	padding: 0;
+	color: #FFF;
+}
+
+.topic_row_title > h2 {
+	margin: 0;
+	padding: 0;
+	padding-left: 10px;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 20px; 
+	line-height: 50px;
+	font-weight: normal;
+}
+
+.topic_row_select {
+	display: inline-block;
+	float: left;
+	width: 12%;
+	height: 50px;
+	margin: 0;
+	padding: 0;
+}
+
+.topic_row_select > p {
+	padding: 0;
+}
+
+.topic_row_top, .topic_row_bottom {
+	width: 100%;
+	height: 25px;
+	margin: 0;
+	padding: 0;
+	color: #FFF;
+}
+
+.topic_row_top {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 18px; 
+	line-height: 25px;
+	font-weight: normal;
+	text-align: center;
+}
+
+.topic_row_bottom > select {
+	width: 70%;
+	margin: 2px 15%;
+	padding: 0;
+	height: 21px;
+	text-align: center !important;
+}
+
+.topic_row_top.easy{
+	color: #0dd850;
+}
+
+.topic_row_top.medium{
+	color: #f28c1f;
+}
+
+.topic_row_top.hard{
+	color: #cc0704;
 }
 
 #maths_button {
@@ -14,7 +174,7 @@
 }
 
 #maths_button.h3 {
-	 line-height: 50px
+	 line-height: 50px;
 }
 
 #maths_button:hover {

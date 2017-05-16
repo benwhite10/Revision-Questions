@@ -25,8 +25,7 @@ switch($type) {
 
 function download_worksheet($ids) {
 	$count = count($ids);
-	//if ($count === 0) fail_request("You have not selected any questions", null);
-	if ($count === 0) fail_request($ids, null);
+	if ($count === 0) fail_request("You have not selected any questions", null);
 	$query = "SELECT * FROM TMATHSQUESTIONS MQ ";
 	$query .= "WHERE `ID` IN (";
 	$i = 0;
@@ -51,23 +50,16 @@ function download_worksheet($ids) {
 		$text .= "\Question $stext ";
 	}
 	$text .= "\\end{questions} \\end{document}";
+	$file_name = time() . rand(100,999);
+	file_put_contents("$file_name.tex", $text);
+	exec("pdflatex -interaction=batchmode $file_name.tex"); 
+	unlink("$file_name.tex");
+	unlink("$file_name.out");
+	unlink("$file_name.log");
+	unlink("$file_name.aux");
+	unlink("$file_name.sta");
 
-	file_put_contents("test_latex.tex", $text);
-	//exec('sudo mkdir output');
-	exec('pdflatex -interaction=batchmode test_latex.tex');
-	//$dir = 'Temp';
-	//$files = array_diff(scandir($dir), array('.','..')); 
-	//foreach ($files as $file) { 
-		//(is_dir("$dir/$file")) ? delTree("$dir/$file") : unlink("$dir/$file"); 
-	//} 
-	//rmdir($dir); 
-	unlink("test_latex.tex");
-	unlink("test_latex.out");
-	unlink("test_latex.log");
-	unlink("test_latex.aux");
-	unlink("test_latex.sta");
-
-	$response = array("url" => "requests/test_latex.pdf", "text" => $text);
+	$response = array("url" => "requests/$file_name.pdf", "text" => $text);
 	succeed_request($response);
 }
 

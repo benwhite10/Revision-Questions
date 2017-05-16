@@ -75,28 +75,28 @@ function write_questions(json) {
 		hard_ids = topics[i]["hard_ids"];
 		inner_html += "<div class='topic_row' id='row_" + i + "'>";
 		inner_html += "<div class='topic_row_title'><h2>" + title + "</h2></div>";
-		inner_html += "<div class='topic_row_select easy'><p>Easy</p><select name='questions_e_" + i + "' id='questions_e_" + i + "'>";
+		inner_html += "<div class='topic_row_select easy'><div class='topic_row_top easy'>Easy</div><div class='topic_row_bottom easy'><select name='questions_e_" + i + "' id='questions_e_" + i + "'>";
 		inner_html += "<option>0</option>";
 		for (j=0; j < easy_ids.length; j++) {
 			inner_html += "<option>" + (j + 1) + "</option>";
 		}
-		inner_html += "</select>";
+		inner_html += "</select></div>";
 		inner_html += "<input type='hidden' value='" + JSON.stringify(easy_ids) + "' id='ids_e_" + i + "'/></div>";
 		
-		inner_html += "<div class='topic_row_select medium'><p>Medium</p><select name='questions_m_" + i + "' id='questions_m_" + i + "'>";
+		inner_html += "<div class='topic_row_select medium'><div class='topic_row_top medium'>Medium</div><div class='topic_row_bottom medium'><select name='questions_m_" + i + "' id='questions_m_" + i + "'>";
 		inner_html += "<option>0</option>";
 		for (j=0; j < med_ids.length; j++) {
 			inner_html += "<option>" + (j + 1) + "</option>";
 		}
-		inner_html += "</select>";
+		inner_html += "</select></div>";
 		inner_html += "<input type='hidden' value='" + JSON.stringify(med_ids) + "' id='ids_m_" + i + "'/></div>";
 		
-		inner_html += "<div class='topic_row_select hard'><p>Hard</p><select name='questions_h_" + i + "' id='questions_h_" + i + "'>";
+		inner_html += "<div class='topic_row_select hard'><div class='topic_row_top hard'>Hard</div><div class='topic_row_bottom hard'><select name='questions_h_" + i + "' id='questions_h_" + i + "'>";
 		inner_html += "<option>0</option>";
 		for (j=0; j < hard_ids.length; j++) {
 			inner_html += "<option>" + (j + 1) + "</option>";
 		}
-		inner_html += "</select>";
+		inner_html += "</select></div>";
 		inner_html += "<input type='hidden' value='" + JSON.stringify(hard_ids) + "' id='ids_h_" + i + "'/></div>";
 		inner_html += "</div>";
 	}
@@ -134,6 +134,8 @@ function generateReport() {
 		// Removing this line causes an infinite loop
 		test = "Test";
 	}
+	$("#generate_button").html("<h3>Generating...</h3>");
+	$("#generate_button").attr('onclick', '');
 	var infoArray = {
 		type: "DOWNLOAD",
 		ids: JSON.stringify(final_ids)
@@ -192,4 +194,6 @@ function downloadSuccess(json) {
 	} else {
 		console.log(json);
 	}
+	$("#generate_button").html("<h3>Generate Worksheet</h3>");
+	$("#generate_button").attr('onclick', 'generateReport()');
 }

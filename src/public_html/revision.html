@@ -21,11 +21,13 @@
 		</div>
 		<div id="year_groups">
 			<div class="year_groups_col">
-				<label for="year_group">Year Group</label>
-				<select name="year_group" id="year_group_select" onchange="change_year_group()"></select>
+				<div class="year_group_label"><h3>Year Group</h3></div>
+				<div class="year_group_select">
+					<select name="year_group" id="year_group_select" onchange="change_year_group()"></select>
+				</div>
 			</div>
 			<div class="year_groups_col">
-				<div id="generate_button" onclick="generateReport()" style="cursor:pointer">
+				<div id="generate_button" onclick="generateReport()">
 					<h3>Generate Worksheet</h3>
 				</div>
 			</div>
