@@ -187,13 +187,37 @@ function array_contains(array, val) {
 function downloadSuccess(json) {
 	if (json["success"]) {
 		var link = document.createElement("a");
-		link.setAttribute("href", json["response"]["url"]);
+		link.setAttribute("href", "requests/" + json["response"]["name"]);
 		link.setAttribute("download", "Maths Revision.pdf");
 		document.body.appendChild(link);
 		link.click();
+		setTimeout(function(){ 
+				delete_worksheet_request(json["response"]["name"]); 
+			}, 20 * 1000);
+		
+		
 	} else {
 		console.log(json);
 	}
 	$("#generate_button").html("<h3>Generate Worksheet</h3>");
 	$("#generate_button").attr('onclick', 'generateReport()');
+}
+
+function delete_worksheet_request(name) {
+	var infoArray = {
+		type: "DELETE",
+		name: name
+	};
+	$.ajax({
+		type: "POST",
+		data: infoArray,
+		url: "/requests/revision.php",
+		dataType: "json",
+		success: function(json){
+			console.log(json);
+		},
+		error: function(json){
+			console.log(json);
+		}
+	});
 }

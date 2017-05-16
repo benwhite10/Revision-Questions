@@ -6,6 +6,7 @@ $type = filter_input(INPUT_POST,'type',FILTER_SANITIZE_STRING);
 $file = filter_input(INPUT_POST,'file',FILTER_SANITIZE_STRING);
 $question_ids = json_decode(filter_input(INPUT_POST,'ids',FILTER_SANITIZE_STRING), TRUE);
 $year = filter_input(INPUT_POST,'year',FILTER_SANITIZE_STRING);
+$name = filter_input(INPUT_POST,'name',FILTER_SANITIZE_STRING);
 
 switch($type) {
 	case "DOWNLOAD":
@@ -13,7 +14,7 @@ switch($type) {
 		download_worksheet($question_ids);
 		break;
 	case "DELETE":
-		delete_worksheet();
+		delete_worksheet($name);
 		break;
 	case "QUESTION_INFO":
 		get_question_info($year);
@@ -53,14 +54,19 @@ function download_worksheet($ids) {
 	$file_name = time() . rand(100,999);
 	file_put_contents("$file_name.tex", $text);
 	exec("pdflatex -interaction=batchmode $file_name.tex"); 
-	unlink("$file_name.tex");
-	unlink("$file_name.out");
-	unlink("$file_name.log");
-	unlink("$file_name.aux");
-	unlink("$file_name.sta");
+	if (file_exists("$file_name.tex")) unlink("$file_name.tex");
+	if (file_exists("$file_name.out")) unlink("$file_name.out");
+	if (file_exists("$file_name.log")) unlink("$file_name.log");
+	if (file_exists("$file_name.aux")) unlink("$file_name.aux");
+	if (file_exists("$file_name.sta")) unlink("$file_name.sta");
 
-	$response = array("url" => "requests/$file_name.pdf", "text" => $text);
+	$response = array("name" => "$file_name.pdf", "text" => $text);
 	succeed_request($response);
+}
+
+function delete_worksheet($name) {
+	if (file_exists($name)) unlink($name);
+	succeed_request(null);
 }
 
 function get_year_groups() {
