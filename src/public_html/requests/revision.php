@@ -81,7 +81,7 @@ function get_year_groups() {
 }
 
 function get_question_info($year) {
-	$query = "SELECT `ID`, `Unit`, `Topic`, `Difficulty` FROM `tmathsquestions` WHERE `Year` = '$year';";
+	$query = "SELECT `ID`, `Unit`, `Topic`, `Difficulty` FROM `tmathsquestions` WHERE `Year` = '$year' ORDER BY `Unit`, `Topic`;";
 	try{
 		$questions = db_select_exception($query);
 	} catch (Exception $ex) {
@@ -104,7 +104,7 @@ function get_question_info($year) {
 						$return_topics[$key]["med_ids"] = $med_ids_array;
 						break;
 					case "Hard":
-						$hard_ids_array = $topic["easy_ids"];
+						$hard_ids_array = $topic["hard_ids"];
 						array_push($hard_ids_array, $question["ID"]);
 						$return_topics[$key]["hard_ids"] = $hard_ids_array;
 						break;
