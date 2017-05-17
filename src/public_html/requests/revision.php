@@ -27,7 +27,7 @@ switch($type) {
 function download_worksheet($ids) {
 	$count = count($ids);
 	if ($count === 0) fail_request("You have not selected any questions", null);
-	$query = "SELECT * FROM TMATHSQUESTIONS MQ ";
+	$query = "SELECT * FROM tmathsquestions MQ ";
 	$query .= "WHERE `ID` IN (";
 	$i = 0;
 	foreach ($ids as $id) {
