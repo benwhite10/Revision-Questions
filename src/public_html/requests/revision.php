@@ -5,13 +5,14 @@ include_once $include_path . '/includes/db_functions.php';
 $type = filter_input(INPUT_POST,'type',FILTER_SANITIZE_STRING);
 $file = filter_input(INPUT_POST,'file',FILTER_SANITIZE_STRING);
 $question_ids = json_decode(filter_input(INPUT_POST,'ids',FILTER_SANITIZE_STRING), TRUE);
+$question = isset($_POST['question']) ? json_decode($_POST['question'], TRUE) : "Nope";
 $year = filter_input(INPUT_POST,'year',FILTER_SANITIZE_STRING);
 $name = filter_input(INPUT_POST,'name',FILTER_SANITIZE_STRING);
 
 switch($type) {
 	case "DOWNLOAD":
 	default:
-		download_worksheet($question_ids);
+		download_worksheet($question_ids, $name);
 		break;
 	case "DELETE":
 		delete_worksheet($name);
@@ -22,9 +23,36 @@ switch($type) {
 	case "YEAR_GROUPS":
 		get_year_groups();
 		break;
+	case "INSERT_QUESTION":
+		insert_question($question);
+		break;
 }
 
-function download_worksheet($ids) {
+function insert_question($question) {
+	$query_1 = "SELECT 1 FROM  tmathsquestions WHERE `Question` = '" . mysql_real_escape_string($question["q_text"]) . "' AND `Solution` = '" . mysql_real_escape_string($question["s_text"]) . "';";
+	try {
+		$return = db_select_exception($query_1);
+		if(count($return) > 0) succeed_request(array("msg" => "Exists"));
+	} catch (Exception $ex) {
+		fail_request("There was an error inserting the question", $ex);
+	}
+		
+	
+	$query = "INSERT INTO tmathsquestions (`Year`, `Unit`, `Topic`, `Difficulty`, `Question`, `Solution`) VALUES ('3rd Form', ";
+	$query .= "'" . mysql_real_escape_string($question["unit"]) . "', ";
+	$query .= "'" . mysql_real_escape_string($question["topic"]) . "', ";
+	$query .= "'" . mysql_real_escape_string($question["difficulty"]) . "', ";
+	$query .= "'" . mysql_real_escape_string($question["q_text"]) . "', ";
+	$query .= "'" . mysql_real_escape_string($question["s_text"]) . "')";
+	try{
+		db_insert_query_exception($query);
+	} catch (Exception $ex) {
+		fail_request("There was an error inserting the question", $ex);
+	}
+	succeed_request(array("msg" => "Completed"));
+}
+
+function download_worksheet($ids, $name) {
 	$count = count($ids);
 	if ($count === 0) fail_request("You have not selected any questions", null);
 	$query = "SELECT * FROM tmathsquestions MQ ";
@@ -40,7 +68,9 @@ function download_worksheet($ids) {
 		fail_request("There was an error retrieving the questions", $ex);
 	}
 	
-	$text = "\\documentclass{Class_Files/Welly_Workbook} \\printdiagramstrue \\begin{document} \\nextprobset{Revision Questions} \\begin{questions}";
+	if (!isset($name) || strlen(trim($name)) < 1) $name = "Maths Revision Questions";
+	
+	$text = "\\documentclass{Class_Files/Welly_Workbook} \\printdiagramstrue \\begin{document} \\nextprobset{" . $name . "} \\begin{questions}";
 	foreach ($questions as $question) {
 		$qtext = $question["Question"];
 		$text .= "\Question $qtext ";
@@ -60,7 +90,7 @@ function download_worksheet($ids) {
 	if (file_exists("$file_name.aux")) unlink("$file_name.aux");
 	if (file_exists("$file_name.sta")) unlink("$file_name.sta");
 
-	$response = array("name" => "$file_name.pdf", "text" => $text);
+	$response = array("name" => "$file_name.pdf", "text" => $text, "sheet_name" => $name);
 	succeed_request($response);
 }
 

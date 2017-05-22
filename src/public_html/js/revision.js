@@ -75,7 +75,7 @@ function write_questions(json) {
 		hard_ids = topics[i]["hard_ids"];
 		inner_html += "<div class='topic_row' id='row_" + i + "'>";
 		inner_html += "<div class='topic_row_title'><h2>" + title + "</h2></div>";
-		inner_html += "<div class='topic_row_select easy'><div class='topic_row_top easy'>Easy</div><div class='topic_row_bottom easy'><select name='questions_e_" + i + "' id='questions_e_" + i + "'>";
+		inner_html += "<div class='topic_row_select easy'><div class='topic_row_top easy'>Easy</div><div class='topic_row_bottom easy'><select class='questions_select easy'  name='questions_e_" + i + "' id='questions_e_" + i + "'>";
 		inner_html += "<option>0</option>";
 		for (j=0; j < easy_ids.length; j++) {
 			inner_html += "<option>" + (j + 1) + "</option>";
@@ -83,7 +83,7 @@ function write_questions(json) {
 		inner_html += "</select></div>";
 		inner_html += "<input type='hidden' value='" + JSON.stringify(easy_ids) + "' id='ids_e_" + i + "'/></div>";
 		
-		inner_html += "<div class='topic_row_select medium'><div class='topic_row_top medium'>Medium</div><div class='topic_row_bottom medium'><select name='questions_m_" + i + "' id='questions_m_" + i + "'>";
+		inner_html += "<div class='topic_row_select medium'><div class='topic_row_top medium'>Medium</div><div class='topic_row_bottom medium'><select class='questions_select medium' name='questions_m_" + i + "' id='questions_m_" + i + "'>";
 		inner_html += "<option>0</option>";
 		for (j=0; j < med_ids.length; j++) {
 			inner_html += "<option>" + (j + 1) + "</option>";
@@ -91,7 +91,7 @@ function write_questions(json) {
 		inner_html += "</select></div>";
 		inner_html += "<input type='hidden' value='" + JSON.stringify(med_ids) + "' id='ids_m_" + i + "'/></div>";
 		
-		inner_html += "<div class='topic_row_select hard'><div class='topic_row_top hard'>Hard</div><div class='topic_row_bottom hard'><select name='questions_h_" + i + "' id='questions_h_" + i + "'>";
+		inner_html += "<div class='topic_row_select hard'><div class='topic_row_top hard'>Hard</div><div class='topic_row_bottom hard'><select class='questions_select hard'  name='questions_h_" + i + "' id='questions_h_" + i + "'>";
 		inner_html += "<option>0</option>";
 		for (j=0; j < hard_ids.length; j++) {
 			inner_html += "<option>" + (j + 1) + "</option>";
@@ -136,9 +136,11 @@ function generateReport() {
 	}
 	$("#generate_button").html("<h3>Generating...</h3>");
 	$("#generate_button").attr('onclick', '');
+	var name = $("#name_input").val();
 	var infoArray = {
 		type: "DOWNLOAD",
-		ids: JSON.stringify(final_ids)
+		ids: JSON.stringify(final_ids),
+		name: name
 	};
 	$.ajax({
 		type: "POST",
@@ -149,6 +151,7 @@ function generateReport() {
 			downloadSuccess(json);
 		},
 		error: function(json){
+			alert("There was an error downloading the worksheet. Please refresh the page and try again");
 			console.log(json["responseText"]);
 		}
 	});
@@ -188,7 +191,7 @@ function downloadSuccess(json) {
 	if (json["success"]) {
 		var link = document.createElement("a");
 		link.setAttribute("href", "requests/" + json["response"]["name"]);
-		link.setAttribute("download", "Maths Revision.pdf");
+		link.setAttribute("download", json["response"]["sheet_name"] + ".pdf");
 		document.body.appendChild(link);
 		link.click();
 		setTimeout(function(){ 
@@ -197,6 +200,11 @@ function downloadSuccess(json) {
 		
 		
 	} else {
+		if (json["message"] === "You have not selected any questions") {
+			alert("You have not selected any questions. Please try again.");
+		} else {
+			alert("There was an error downloading the worksheet. Please refresh the page and try again");
+		}
 		console.log(json);
 	}
 	$("#generate_button").html("<h3>Generate Worksheet</h3>");

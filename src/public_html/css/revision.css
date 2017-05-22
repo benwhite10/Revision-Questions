@@ -21,7 +21,7 @@ body {
 }
 
 #year_groups {
-	height: 100px;
+	height: 80px;
 }
 
 .year_groups_col {
@@ -60,6 +60,13 @@ body {
 	height: 25px;
 	margin: 5px 0;
 	padding: 0;
+	background: transparent;
+    outline: none;
+    border: 1px solid #FFF;
+    color: #fff;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 16px; 
+	line-height: 25px;
 }
 
 #generate_button {
@@ -122,6 +129,26 @@ body {
 	padding: 0;
 }
 
+.questions_select{
+	background: transparent;
+    outline: none;
+}
+
+.questions_select.easy{
+	border: 1px solid #0dd850;
+    color: #0dd850;
+}
+
+.questions_select.medium{
+	border: 1px solid #f28c1f;
+    color: #f28c1f;
+}
+
+.questions_select.hard{
+	border: 1px solid #cc0704;
+    color: #cc0704;
+}
+
 .topic_row_select > p {
 	padding: 0;
 }
@@ -180,4 +207,50 @@ body {
 #maths_button:hover {
 	transition: all 60ms ease;
     opacity: .85;
+}
+
+#name_div {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	height: 40px;
+}
+
+#name_title_div {
+	width: calc(20% - 20px);
+	margin: 0;
+	padding: 0;
+	padding-right: 20px;
+	display: inline-block;
+	float: left;
+	min-width: 100px;
+	height:100%;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 22px; 
+	line-height: 40px;
+	font-weight: normal;
+	color: #FFF;
+	text-align: right;
+}
+
+#name_input_div{
+	width: 80%;
+	margin: 0;
+	padding: 0;
+	display: inline-block;
+	float: left;
+	height: 100%
+}
+
+#name_input {
+	width: 80%;
+	height: 32px;
+	margin: 4px 0;
+	padding: 0 10px;
+	line-height: 32px;
+	font-size: 20px;
+	background: transparent;
+	color: #FFF;
+	outline: none;
+	border: 1px solid #FFF;
 }
