@@ -17,6 +17,9 @@ switch($type) {
 	case "DELETE":
 		delete_worksheet($name);
 		break;
+	case "DELETE_ALL":
+		delete_all();
+		break;
 	case "QUESTION_INFO":
 		get_question_info($year);
 		break;
@@ -96,6 +99,16 @@ function download_worksheet($ids, $name) {
 
 function delete_worksheet($name) {
 	if (file_exists($name)) unlink($name);
+	succeed_request(null);
+}
+
+function delete_all() {
+	$time = time() - 20*60;
+	foreach (glob(dirname(__FILE__) . "/*.pdf") as $file) {
+		if(intval(substr(basename($file), 0, -7)) < $time) {
+			if (file_exists($file)) unlink($file);
+		}
+	}
 	succeed_request(null);
 }
 

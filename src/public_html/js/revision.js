@@ -1,5 +1,6 @@
 $(document).ready(function(){
 	request_year_groups();
+	setInterval(function(){ delete_all_old(); }, 60 * 1000);
 });
 
 function request_year_groups() {
@@ -40,6 +41,24 @@ function request_questions(year) {
 			} else {
 				console.log(json);
 			}
+		},
+		error: function(json){
+			console.log(json);
+		}
+	});
+}
+
+function delete_all_old() {
+	var infoArray = {
+		type: "DELETE_ALL"
+	}
+	$.ajax({
+		type: "POST",
+		data: infoArray,
+		url: "/requests/revision.php",
+		dataType: "json",
+		success: function(json){
+
 		},
 		error: function(json){
 			console.log(json);
@@ -101,7 +120,6 @@ function write_questions(json) {
 		inner_html += "</div>";
 	}
 	$("#topics_div").html(inner_html);
-	console.log(json);
 }
 
 function generateReport() {
@@ -197,8 +215,6 @@ function downloadSuccess(json) {
 		setTimeout(function(){ 
 				delete_worksheet_request(json["response"]["name"]); 
 			}, 20 * 1000);
-		
-		
 	} else {
 		if (json["message"] === "You have not selected any questions") {
 			alert("You have not selected any questions. Please try again.");
@@ -222,7 +238,6 @@ function delete_worksheet_request(name) {
 		url: "/requests/revision.php",
 		dataType: "json",
 		success: function(json){
-			console.log(json);
 		},
 		error: function(json){
 			console.log(json);
